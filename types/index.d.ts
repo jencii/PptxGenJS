@@ -980,6 +980,51 @@ declare namespace PptxGenJS {
 		 */
 		color?: HexColor
 	}
+	export interface GradientStop {
+		/**
+		 * Positive Fixed Percentage
+		 */
+		pos: number;	// a:ST_PositiveFixedPercentage
+		/**
+		 * Fill color
+		 * - `HexColor` or `ThemeColor`
+		 * @example 'FF0000' // red
+		 @example { color:'pptx.SchemeColor.accent1' } // theme color Accent1
+		 */
+	   color?: Color
+	}
+	export interface GradientStopList {
+		/**
+		 * Gradient stops
+		 */
+		gs?: any;
+	}
+	export interface GradientFillProperties {
+		/**
+		 * Tile Flip Mode
+		 */
+		flip?: 'x' | 'y' | 'xy';	// a:ST_TileFlipMode
+		/**
+		 * Rotate With Shape
+		 */
+		rotWithShape?: boolean;
+		/**
+		 * Gradient Stop List
+		 */
+		gsLst?: GradientStopList[];
+		/**
+		 * Linear Gradient Fill
+		 */
+		lin?: any;
+		/**
+		 * Path Gradient
+		 */
+		path?: any;
+		/**
+		 * Tile Rectangle
+		 */
+		tileRect?: any[];
+	}
 	// used by: shape, table, text
 	export interface ShapeFillProps {
 		/**
@@ -1005,7 +1050,11 @@ declare namespace PptxGenJS {
 		 * Fill type
 		 * - 'solid' @deprecated v3.3.0
 		 */
-		type?: 'none' | 'solid'
+		type?: 'none' | 'solid' | 'gradient'
+		/**
+		 * Gradient properties
+		 */
+		gradientProps?: GradientFillProperties
 	}
 	export interface ShapeLineProps extends ShapeFillProps {
 		/**

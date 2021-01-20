@@ -3,7 +3,7 @@
  */
 
 import { EMU, REGEX_HEX_COLOR, DEF_FONT_COLOR, ONEPT, SchemeColor, SCHEME_COLORS } from './core-enums'
-import { IChartOpts, PresLayout, TextGlowProps, PresSlide, ShapeFillProps, Color, ShapeLineProps } from './core-interfaces'
+import { IChartOpts, PresLayout, TextGlowProps, PresSlide, ShapeFillProps, Color, ShapeLineProps, GradientFillProperties } from './core-interfaces'
 
 /**
  * Convert string percentages to number relative to slide size
@@ -189,6 +189,53 @@ export function createGlowElement(options: TextGlowProps, defaults: TextGlowProp
 }
 
 /**
+ * Generate a `a:gradFil`.
+ * @param {string|SCHEME_COLORS} colorStr - hexa representation (eg. "FFFF00") or a scheme color constant (eg. pptx.SchemeColor.ACCENT1)
+ * @template
+ *	<a:gradFill flip="none" rotWithShape="1">
+ *		<a:gsLst>
+ *			<a:gs pos="0">
+ *				<a:schemeClr val="accent1">
+ *				<a:lumMod val="67000" />
+ *			</a:schemeClr>
+ *			</a:gs>
+ *			<a:gs pos="50000">
+ *				<a:schemeClr val="bg1" />
+ *			</a:gs>
+ *		</a:gsLst>
+ *		<a:lin ang="0" scaled="1" />
+ *		<a:tileRect />
+ *	</a:gradFill>
+ * @returns {string} XML string
+ */
+export function genXmlGradientFill(props: GradientFillProperties): string {
+	console.log('genXmlGradientFill', props)
+	let strXml = `<a:gradFill flip="${props.flip ? props.flip : "none"}" rotWithShape="${props.rotWithShape ? "1" : "0"}">`
+	
+	if (props.gsLst) {
+		strXml += '<a:gsLst>'
+
+		props.gsLst.forEach(gs => {
+			console.log('gs', gs)
+			strXml += `	<a:gs pos="${gs.pos}">`
+			strXml += createColorElement(gs.color ? gs.color : 'accent1')
+			strXml += '	</a:gs>'
+		});
+
+		strXml += '</a:gsLst>'
+	}
+	// TODO props.lin
+	strXml += '<a:lin ang="0" scaled="1" />'
+	// TODO props.tileRect
+	strXml += '<a:tileRect />'
+
+	strXml += '</a:gradFill>'
+console.log('xml', strXml)
+	return strXml;
+}
+
+
+/**
  * Create color selection
  * @param {shapeFill} ShapeFillProps - options
  * @param {string} backColor - color string
@@ -199,6 +246,7 @@ export function genXmlColorSelection(shapeFill: Color | ShapeFillProps | ShapeLi
 	let fillType = 'solid'
 	let internalElements = ''
 	let outText = ''
+	let gradientProps: GradientFillProperties = {};
 
 	if (backColor && typeof backColor === 'string') {
 		outText += `<p:bg><p:bgPr>${genXmlColorSelection(backColor.replace('#', ''))}<a:effectLst/></p:bgPr></p:bg>`
@@ -211,11 +259,15 @@ export function genXmlColorSelection(shapeFill: Color | ShapeFillProps | ShapeLi
 			if (shapeFill.color) colorVal = shapeFill.color
 			if (shapeFill.alpha) internalElements += `<a:alpha val="${Math.round((100 - shapeFill.alpha) * 1000)}"/>` // @deprecated v3.3.0
 			if (shapeFill.transparency) internalElements += `<a:alpha val="${Math.round((100 - shapeFill.transparency) * 1000)}"/>`
+			if (shapeFill.gradientProps) gradientProps = shapeFill.gradientProps;
 		}
 
 		switch (fillType) {
 			case 'solid':
 				outText += `<a:solidFill>${createColorElement(colorVal, internalElements)}</a:solidFill>`
+				break
+			case 'gradient':
+				outText += genXmlGradientFill(gradientProps)
 				break
 			default:
 				outText += '' // @note need a statement as having only "break" is removed by rollup, then tiggers "no-default" js-linter

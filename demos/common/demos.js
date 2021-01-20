@@ -2657,7 +2657,29 @@ function genSlides_Shape(pptx) {
 	slide.addShape(pptx.shapes.RECTANGLE, { x: 3.0, y: 0.7, w: 1.5, h: 3.0, fill: { color: 'F38E00' }, rotate: 45 });
 	slide.addShape(pptx.shapes.OVAL, { x: 5.4, y: 0.8, w: 3.0, h: 1.5, fill: { type: 'solid', color: '0088CC' } });
 	slide.addShape(pptx.shapes.OVAL, { x: 7.7, y: 1.4, w: 3.0, h: 1.5, fill: { color: 'FF00CC' }, rotate: 90 }); // TEST: no type
-	slide.addShape(pptx.shapes.ROUNDED_RECTANGLE, { x: 10, y: 2.5, w: 3.0, h: 1.5, r: 0.2, fill: { color: '00FF00' }, line: '000000', lineSize: 1 }); // TEST: DEPRECATED: `fill`,`line`,`lineSize`
+	slide.addShape(pptx.shapes.ROUNDED_RECTANGLE, { x: 10, y: 2.5, w: 3.0, h: 1.5, r: 0.2, 
+		fill: { 
+			type: 'gradient', color: '00FF00',
+			gradientProps: {
+				flip: 'none',
+				rotWithShape: true,
+				gsLst: [
+					{
+						pos: 0,
+						color: 'accent1'
+					},
+					{
+						pos: 20000,
+						color: '00B050'
+					},
+					{
+						pos: 70000,
+						color: 'FF0000'
+					}
+				]
+			}
+		}, 
+		line: '000000', lineSize: 1 }); // TEST: DEPRECATED: `fill`,`line`,`lineSize`
 	slide.addShape(pptx.shapes.ARC, { x: 10.75, y: 0.8, w: 1.5, h: 1.5, fill: { color: '0088CC' }, angleRange: [45, 315] });
 	//
 	slide.addShape(pptx.shapes.LINE, { x: 4.2, y: 4.4, w: 5.0, h: 0.0, line: { color: 'FF0000', width: 1, dashType: 'lgDash' } });
