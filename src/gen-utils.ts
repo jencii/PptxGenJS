@@ -209,7 +209,6 @@ export function createGlowElement(options: TextGlowProps, defaults: TextGlowProp
  * @returns {string} XML string
  */
 export function genXmlGradientFill(props: GradientFillProperties): string {
-	console.log('genXmlGradientFill', props)
 	let strXml = `<a:gradFill flip="${props.flip ? props.flip : "none"}" rotWithShape="${props.rotWithShape ? "1" : "0"}">`
 	
 	if (props.gsLst) {

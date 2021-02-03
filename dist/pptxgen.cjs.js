@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-02-03T09:50:23.896Z */
+/* PptxGenJS 3.5.0-beta @ 2021-02-03T10:58:09.835Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -793,7 +793,6 @@ function createGlowElement(options, defaults) {
  * @returns {string} XML string
  */
 function genXmlGradientFill(props) {
-    console.log('genXmlGradientFill', props);
     var strXml = "<a:gradFill flip=\"" + (props.flip ? props.flip : "none") + "\" rotWithShape=\"" + (props.rotWithShape ? "1" : "0") + "\">";
     if (props.gsLst) {
         strXml += '<a:gsLst>';
