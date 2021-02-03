@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-02-03T10:58:09.851Z */
+/* PptxGenJS 3.5.0-beta @ 2021-02-03T11:59:09.183Z */
 import JSZip from 'jszip';
 
 /**
@@ -803,7 +803,6 @@ function genXmlGradientFill(props) {
     // TODO props.tileRect
     strXml += '<a:tileRect />';
     strXml += '</a:gradFill>';
-    console.log('xml', strXml);
     return strXml;
 }
 /**

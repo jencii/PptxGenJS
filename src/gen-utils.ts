@@ -229,7 +229,7 @@ export function genXmlGradientFill(props: GradientFillProperties): string {
 	strXml += '<a:tileRect />'
 
 	strXml += '</a:gradFill>'
-console.log('xml', strXml)
+
 	return strXml;
 }
 
