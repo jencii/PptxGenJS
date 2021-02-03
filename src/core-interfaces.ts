@@ -172,7 +172,7 @@ export interface GradientStop {
 	 * Fill color
 	 * - `HexColor` or `ThemeColor`
 	 * @example 'FF0000' // red
-	 @example { color:'pptx.SchemeColor.accent1' } // theme color Accent1
+	 * @example { color:'pptx.SchemeColor.accent1' } // theme color Accent1
 	 */
    color?: Color
 }

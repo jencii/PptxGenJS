@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-01-14T05:37:45.214Z */
+/* PptxGenJS 3.5.0-beta @ 2021-01-19T09:20:24.117Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -773,6 +773,47 @@ function createGlowElement(options, defaults) {
     return strXml;
 }
 /**
+ * Generate a `a:gradFil`.
+ * @param {string|SCHEME_COLORS} colorStr - hexa representation (eg. "FFFF00") or a scheme color constant (eg. pptx.SchemeColor.ACCENT1)
+ * @template
+ *	<a:gradFill flip="none" rotWithShape="1">
+ *		<a:gsLst>
+ *			<a:gs pos="0">
+ *				<a:schemeClr val="accent1">
+ *				<a:lumMod val="67000" />
+ *			</a:schemeClr>
+ *			</a:gs>
+ *			<a:gs pos="50000">
+ *				<a:schemeClr val="bg1" />
+ *			</a:gs>
+ *		</a:gsLst>
+ *		<a:lin ang="0" scaled="1" />
+ *		<a:tileRect />
+ *	</a:gradFill>
+ * @returns {string} XML string
+ */
+function genXmlGradientFill(props) {
+    console.log('genXmlGradientFill', props);
+    var strXml = "<a:gradFill flip=\"" + (props.flip ? props.flip : "none") + "\" rotWithShape=\"" + (props.rotWithShape ? "1" : "0") + "\">";
+    if (props.gsLst) {
+        strXml += '<a:gsLst>';
+        props.gsLst.forEach(function (gs) {
+            console.log('gs', gs);
+            strXml += "\t<a:gs pos=\"" + gs.pos + "\">";
+            strXml += createColorElement(gs.color ? gs.color : 'accent1');
+            strXml += '	</a:gs>';
+        });
+        strXml += '</a:gsLst>';
+    }
+    // TODO props.lin
+    strXml += '<a:lin ang="0" scaled="1" />';
+    // TODO props.tileRect
+    strXml += '<a:tileRect />';
+    strXml += '</a:gradFill>';
+    console.log('xml', strXml);
+    return strXml;
+}
+/**
  * Create color selection
  * @param {shapeFill} ShapeFillProps - options
  * @param {string} backColor - color string
@@ -783,6 +824,7 @@ function genXmlColorSelection(shapeFill, backColor) {
     var fillType = 'solid';
     var internalElements = '';
     var outText = '';
+    var gradientProps = {};
     if (backColor && typeof backColor === 'string') {
         outText += "<p:bg><p:bgPr>" + genXmlColorSelection(backColor.replace('#', '')) + "<a:effectLst/></p:bgPr></p:bg>";
     }
@@ -798,10 +840,15 @@ function genXmlColorSelection(shapeFill, backColor) {
                 internalElements += "<a:alpha val=\"" + Math.round((100 - shapeFill.alpha) * 1000) + "\"/>"; // @deprecated v3.3.0
             if (shapeFill.transparency)
                 internalElements += "<a:alpha val=\"" + Math.round((100 - shapeFill.transparency) * 1000) + "\"/>";
+            if (shapeFill.gradientProps)
+                gradientProps = shapeFill.gradientProps;
         }
         switch (fillType) {
             case 'solid':
                 outText += "<a:solidFill>" + createColorElement(colorVal, internalElements) + "</a:solidFill>";
+                break;
+            case 'gradient':
+                outText += genXmlGradientFill(gradientProps);
                 break;
             default:
                 outText += ''; // @note need a statement as having only "break" is removed by rollup, then tiggers "no-default" js-linter

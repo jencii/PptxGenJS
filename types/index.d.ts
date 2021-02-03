@@ -995,9 +995,16 @@ declare namespace PptxGenJS {
 	}
 	export interface GradientStopList {
 		/**
-		 * Gradient stops
+		 * Positive Fixed Percentage
 		 */
-		gs?: any;
+		pos: number;	// a:ST_PositiveFixedPercentage
+		/**
+		 * Fill color
+		 * - `HexColor` or `ThemeColor`
+		 * @example 'FF0000' // red
+		 * @example { color:'pptx.SchemeColor.accent1' } // theme color Accent1
+		 */
+	   color?: Color
 	}
 	export interface GradientFillProperties {
 		/**
