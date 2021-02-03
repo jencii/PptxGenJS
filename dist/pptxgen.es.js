@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-02-03T11:59:09.183Z */
+/* PptxGenJS 3.5.0-beta @ 2021-02-03T12:48:07.151Z */
 import JSZip from 'jszip';
 
 /**
@@ -791,7 +791,6 @@ function genXmlGradientFill(props) {
     if (props.gsLst) {
         strXml += '<a:gsLst>';
         props.gsLst.forEach(function (gs) {
-            console.log('gs', gs);
             strXml += "\t<a:gs pos=\"" + gs.pos + "\">";
             strXml += createColorElement(gs.color ? gs.color : 'accent1');
             strXml += '	</a:gs>';

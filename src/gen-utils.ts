@@ -215,7 +215,6 @@ export function genXmlGradientFill(props: GradientFillProperties): string {
 		strXml += '<a:gsLst>'
 
 		props.gsLst.forEach(gs => {
-			console.log('gs', gs)
 			strXml += `	<a:gs pos="${gs.pos}">`
 			strXml += createColorElement(gs.color ? gs.color : 'accent1')
 			strXml += '	</a:gs>'
