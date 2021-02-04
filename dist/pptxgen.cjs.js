@@ -1,4 +1,4 @@
-/* PptxGenJS 3.5.0-beta @ 2021-02-03T12:48:07.137Z */
+/* PptxGenJS 3.5.0-beta @ 2021-02-04T15:11:32.236Z */
 'use strict';
 
 var JSZip = require('jszip');
@@ -793,7 +793,14 @@ function createGlowElement(options, defaults) {
  * @returns {string} XML string
  */
 function genXmlGradientFill(props) {
-    var strXml = "<a:gradFill flip=\"" + (props.flip ? props.flip : "none") + "\" rotWithShape=\"" + (props.rotWithShape ? "1" : "0") + "\">";
+    var strXml = '<a:gradFill';
+    if (props.flip) {
+        strXml += "flip=\"" + props.flip + "\"";
+    }
+    if (props.rotWithShape) {
+        strXml += 'rotWithShape="1"';
+    }
+    strXml += '>';
     if (props.gsLst) {
         strXml += '<a:gsLst>';
         props.gsLst.forEach(function (gs) {
@@ -804,9 +811,9 @@ function genXmlGradientFill(props) {
         strXml += '</a:gsLst>';
     }
     // TODO props.lin
-    strXml += '<a:lin ang="0" scaled="1" />';
+    strXml += '<a:lin ang="0" />';
     // TODO props.tileRect
-    strXml += '<a:tileRect />';
+    // strXml += '<a:tileRect />'
     strXml += '</a:gradFill>';
     return strXml;
 }

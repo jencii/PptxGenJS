@@ -984,7 +984,7 @@ declare namespace PptxGenJS {
 		/**
 		 * Positive Fixed Percentage
 		 */
-		pos: number;	// a:ST_PositiveFixedPercentage
+		pos: number | string;	// a:ST_PositiveFixedPercentage
 		/**
 		 * Fill color
 		 * - `HexColor` or `ThemeColor`
